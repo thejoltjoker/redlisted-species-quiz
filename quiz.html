@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Pröva dina kunskaper om rödlistade arter i detta quiz."
+    />
+    <meta name="keywords" content="rödlistan, rödlistning, quiz" />
+    <title>Quiz</title>
+
+    <link rel="stylesheet" href="main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Young+Serif&family=Nunito:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="select-none bg-amber-100">
+    <div class="p-2 md:p-4">
+      <div class="container mx-auto max-w-screen-sm 2xl:max-w-screen-lg">
+        <header>
+          <div
+            class="overflow-hidden rounded-xl border-4 border-zinc-800 bg-white p-2 text-center drop-shadow-card sm:p-3 md:p-5"
+          >
+            <h1 class="font-title text-2xl font-black md:mb-3 md:text-4xl">
+              En
+              <span
+                class="text-stone-400 line-through decoration-red-600 decoration-4"
+                >ska</span
+              >
+              är på väg bort
+            </h1>
+            <p class="text-lg">Klicka på den rödlistade arten</p>
+          </div>
+        </header>
+        <div id="quiz">
+          <div id="quiz-board" class="grid grid-cols-2 gap-2 md:gap-4">
+            <div
+              class="col-span-full flex flex-col items-center justify-center py-4"
+            >
+              <h2 class="text-center text-2xl font-black md:mb-3 md:text-4xl">
+                Välj en artgrupp
+              </h2>
+              <button
+                id="start-quiz"
+                class="flex-grow cursor-pointer overflow-hidden rounded-2xl border-4 border-zinc-800 bg-teal-300 p-4 text-xl font-extrabold text-zinc-800 drop-shadow-card transition hover:bg-red-400 group-hover:text-red-950 md:flex-grow-0 md:p-6 md:text-4xl md:font-black"
+              >
+                Ryggradsdjur
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="src/quiz.js"></script>
+  </body>
+</html>
