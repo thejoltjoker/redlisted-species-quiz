@@ -121,7 +121,6 @@ export default class Quiz {
         // Use the retrieved inaturalistIds to fetch taxonomic information
         // const taxa = await inat.getTaxa(inaturalistIds);
         const url = Endpoint.taxa(inaturalistIds);
-        console.log("url=" + url);
         const response = await fetch(url);
         const responseJson = await response.json();
         const taxa = responseJson.data;

@@ -110,7 +110,6 @@ const startQuiz = async (event) => {
   try {
     // const response = await fetch(`${process.env.APIURI}/species/${taxonId}`);
     const url = Endpoint.species(taxonId);
-    console.log(url);
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Network response was not OK");

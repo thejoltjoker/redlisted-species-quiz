@@ -3,22 +3,22 @@ export default class Endpoint {
 
   static speciesData(taxonId) {
     const url = `${this.baseUrl}/speciesdata/${taxonId}`;
-    console.log(url);
+    // console.log(url);
     return url;
   }
   static id(query) {
     const url = `${this.baseUrl}/id/${encodeURIComponent(query)}`;
-    console.log(url);
+    // console.log(url);
     return url;
   }
   static taxa(ids) {
     const url = `${this.baseUrl}/taxa/${encodeURIComponent(ids)}`;
-    console.log(url);
+    // console.log(url);
     return url;
   }
   static species(taxonId) {
     const url = `${this.baseUrl}/species/${encodeURIComponent(taxonId)}`;
-    console.log(url);
+    // console.log(url);
     return url;
   }
 }
