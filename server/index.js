@@ -19,7 +19,7 @@ const limiter = RateLimit({
   max: 100,
 });
 // Apply rate limiter to all requests
-app.use(limiter);
+// app.use(limiter);
 // Setup cors and helmet
 app.use(cors());
 app.use(helmet());
