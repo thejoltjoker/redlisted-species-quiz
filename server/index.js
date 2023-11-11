@@ -27,6 +27,11 @@ app.use(helmet());
 // Use JSON
 app.use(express.json());
 
+// Ping api
+app.get("/ping", (req, res) => {
+  res.json({ response: "I'm awake!" });
+});
+
 // Get iNaturalist ID
 app.get("/id/:query", async (req, res) => {
   const inat = new INaturalistClient();

@@ -1,12 +1,16 @@
 import "../src/main.css";
-import { sha256sum } from "../src/shared/utility.js";
 import Quiz from "../src/components/Quiz.js";
-import { speciesGroups } from "../src/shared/data.js";
 import QuizSelectionItem from "../src/components/QuizSelectionItem.js";
 import Endpoint from "../src/shared/Endpoint.js";
+import { pingServer, sha256sum } from "../src/shared/utility.js";
+import { speciesGroups } from "../src/shared/data.js";
+
 const header = document.querySelector("header");
 const quizContainer = document.querySelector("#quiz");
 const quizBoard = document.querySelector("#quiz-board");
+
+// Wake server
+pingServer();
 
 // const getSpecies = async (taxonId) => {
 //   const client = new TaxonomyClient(TAXON_PRIMARY);

@@ -1,3 +1,4 @@
+import Endpoint from "./Endpoint.js";
 import { redlistCategories } from "./data.js";
 
 /**
@@ -33,7 +34,7 @@ export const randomArrayItem = (list) => {
  */
 export const filterDataArray = (dataArray, filterArray, filterParameter) => {
   return dataArray.filter((item) =>
-    filterArray.includes(item[filterParameter]),
+    filterArray.includes(item[filterParameter])
   );
 };
 
@@ -78,7 +79,7 @@ export const shuffleArray = (array) => {
 export const getRedlistCategoryData = (category) => {
   const categories = redlistCategories;
   const result = categories.find((element) =>
-    category.toUpperCase().includes(element.category),
+    category.toUpperCase().includes(element.category)
   );
   return result ?? {};
 };
@@ -105,16 +106,32 @@ export const toKebabCase = (input) => {
  */
 export const constructArtfaktaUrl = (scientificName, taxonId) => {
   return `https://artfakta.se/artinformation/taxa/${toKebabCase(
-    scientificName,
+    scientificName
   )}-${taxonId}`;
 };
 
 export const sha256sum = async (str) => {
   const buf = await crypto.subtle.digest(
     "SHA-256",
-    new TextEncoder("utf-8").encode(str),
+    new TextEncoder("utf-8").encode(str)
   );
   return Array.prototype.map
     .call(new Uint8Array(buf), (x) => ("00" + x.toString(16)).slice(-2))
     .join("");
+};
+
+export const pingServer = () => {
+  fetch(Endpoint.ping)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("Server is sleeping...");
+    })
+    .then((responseJson) => {
+      console.log(`Server says: ${responseJson.response}`);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
