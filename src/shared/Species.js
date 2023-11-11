@@ -2,9 +2,10 @@
  * Species Class
  * Represents a species of wildlife or plant.
  */
-import { PRIMARY_KEY } from "../../env.js";
-import ArtfaktaClient from "../services/artdatabanken/ArtfaktaClient.js";
-import INaturalistClient from "../services/iNaturalist/INaturalistClient.js";
+// import { PRIMARY_KEY } from "../../env.js";
+// import ArtfaktaClient from "../services/artdatabanken/ArtfaktaClient.js";
+// import INaturalistClient from "../services/iNaturalist/INaturalistClient.js";
+import Endpoint from "./Endpoint.js";
 
 export default class Species {
   /**
@@ -59,15 +60,16 @@ export default class Species {
    */
   async getSpeciesData(populate = true) {
     try {
-      const client = new ArtfaktaClient(PRIMARY_KEY);
-      const response = await client.getSpeciesData(this.taxonId);
-
+      const url = Endpoint.speciesData(this.taxonId);
+      const response = await fetch(url);
+      const responseJson = await response.json();
+      const data = responseJson.data[0];
       if (populate) {
-        this.assignAttributesFromObject(response[0]);
-        this.assignAttributesFromObject(response[0].speciesData);
+        this.assignAttributesFromObject(data);
+        this.assignAttributesFromObject(data.speciesData);
       }
-      this.scientificName = response[0].scientificName;
-      this.speciesData = response[0].speciesData;
+      this.scientificName = data.scientificName;
+      this.speciesData = data.speciesData;
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -97,12 +99,14 @@ export default class Species {
   async getInaturalistId() {
     if (!this.iNaturlistId) {
       try {
-        const inat = new INaturalistClient();
+        // const inat = new INaturalistClient();
         let query = this.scientificName
           ? this.scientificName
           : this.englishName; // You may want to define 'englishName' in your class if it's used here.
-        const inatId = await inat.getIdFromScientificName(query);
-        this.iNaturlistId = inatId;
+        // const inatId = await inat.getIdFromScientificName(query);
+        const response = await fetch(Endpoint.id(query));
+        const responseJson = await response.json();
+        this.iNaturlistId = responseJson;
       } catch (error) {
         console.error(error);
         throw new Error(error);
@@ -119,14 +123,17 @@ export default class Species {
    */
   async getPhotos() {
     try {
-      const inat = new INaturalistClient();
+      // const inat = new INaturalistClient();
 
       const inatId = this.iNaturlistId
         ? this.iNaturlistId
         : this.getInaturalistId();
 
-      const taxa = await inat.getTaxa([inatId]);
-      this.photos = taxa.results[0].taxon_photos.map((item) => item.photo);
+      // const taxa = await inat.getTaxa([inatId]);
+      const response = await fetch(Endpoint.taxa([inatId]));
+      this.photos = response.data.results[0].taxon_photos.map(
+        (item) => item.photo
+      );
       return this.photos;
     } catch (error) {
       console.error(error);

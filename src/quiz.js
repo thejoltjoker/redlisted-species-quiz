@@ -110,40 +110,33 @@ const startQuiz = async (event) => {
   button.classList.add("cursor-auto");
 
   // Prepare quiz
-  // let commonSpecies = JSON.parse(
-  //   window.localStorage.getItem(await sha256sum("notRedlisted")),
-  // );
-  // let redlistedSpecies = JSON.parse(
-  //   window.localStorage.getItem(await sha256sum("redlisted")),
-  // );
-
-  // if (!commonSpecies || !redlistedSpecies) {
-  //   [commonSpecies, redlistedSpecies] = await getSpecies(taxonId);
-  // }
-
-  const [commonSpecies, redlistedSpecies] = await getSpecies(taxonId);
+  let notRedlisted;
+  let redlisted;
+  try {
+    const response = await fetch(`http://localhost:8080/species/${taxonId}`);
+    if (!response.ok) {
+      throw new Error("Network response was not OK");
+    }
+    ({ notRedlisted, redlisted } = await response.json());
+  } catch (error) {
+    console.log("There has been a problem:", error);
+  }
 
   // Set local storage
   window.localStorage.setItem("currentTaxon", JSON.stringify(taxonId));
-  // const redlistedSpecies = await getSpecies(227, taxonId, null);
-  // const redlistAnimals = await getRedlistedVertebrata();
+
   window.localStorage.setItem(
     await sha256sum("redlisted"),
-    JSON.stringify(redlistedSpecies)
+    JSON.stringify(redlisted)
   );
 
-  // const commonSpecies = await getSpecies(1, taxonId, redlistedSpecies);
-  // const commonAnimals = await getCommonVertebrata(redlistAnimals);
   window.localStorage.setItem(
     await sha256sum("notRedlisted"),
-    JSON.stringify(commonSpecies)
+    JSON.stringify(notRedlisted)
   );
-  const quiz = new Quiz(10, commonSpecies, redlistedSpecies);
+  const quiz = new Quiz(10, notRedlisted, redlisted);
   quiz.start();
 };
 
+// Show quiz selection
 quizSelection();
-// const startQuizButton = document.querySelector("#start-quiz");
-// startQuizButton.onclick = startQuiz;
-
-// await getSpeciesIds(4000104);

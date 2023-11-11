@@ -86,14 +86,20 @@ export default class QuizInfoCard {
       "h-[35vh] w-full object-cover object-center text-center text-stone-500";
     this.photoContainer.append(this.imgPlaceholder);
     if (!this.species.photos[0]) {
-      this.species
-        .getPhotos()
-        .then((response) => {
-          this.setPhoto(randomArrayItem(response)[1]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      try {
+        this.setPhoto(this.species.photos[0]);
+      } catch (error) {
+        this.setPlaceholderError();
+      }
+      // this.species
+      //   .getPhotos()
+      //   .then((response) => {
+      //     this.setPhoto(randomArrayItem(response)[1]);
+      //   })
+      //   .catch((error) => {
+      //     this.setPlaceholderError();
+      //     console.error(error);
+      //   });
     } else {
       this.setPhoto(randomArrayItem(this.species.photos)[1]);
     }

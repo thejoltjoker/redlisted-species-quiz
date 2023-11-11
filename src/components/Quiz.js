@@ -7,8 +7,10 @@ import QuizProgress from "./QuizProgress.js";
 import INaturalistClient from "../services/iNaturalist/INaturalistClient.js";
 import QuizInfoCard from "./QuizInfoCard.js";
 import QuizSummary from "./QuizSummary.js";
+import Endpoint from "../shared/Endpoint.js";
 // TODO Add error message to user if images fail to load
 // TODO Add back button to quiz selection
+// TODO Implement custom api
 export default class Quiz {
   constructor(rounds = 10, commonSpecies, redlistedSpecies) {
     this.rounds = rounds;
@@ -46,7 +48,7 @@ export default class Quiz {
     const allSpecies = [];
     const cards = [];
     const promises = [];
-    console.log(this.correct.length, this.incorrect.length);
+    // console.log(this.correct.length, this.incorrect.length);
 
     // Pick 1 correct answer and 3 incorrect answers
     for (let i = 0; i < 4; ++i) {
@@ -112,12 +114,18 @@ export default class Quiz {
 
     // Use Promise.all() to run them concurrently
     Promise.all(promises)
+      // .then((results) => Promise.all(results.map((r) => r.json())))
       .then(async (inaturalistIds) => {
         // Create a new INaturalistClient instance
-        const inat = new INaturalistClient();
+        // const inat = new INaturalistClient();
 
         // Use the retrieved inaturalistIds to fetch taxonomic information
-        const taxa = await inat.getTaxa(inaturalistIds);
+        // const taxa = await inat.getTaxa(inaturalistIds);
+        const url = Endpoint.taxa(inaturalistIds);
+        console.log("url=" + url);
+        const response = await fetch(url);
+        const responseJson = await response.json();
+        const taxa = responseJson.data;
 
         // Iterate through the cards
         for (const card of cards) {

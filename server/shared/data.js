@@ -1,5 +1,3 @@
-import "../main.css";
-
 export const redlistCategories = [
   {
     category: "NT",
