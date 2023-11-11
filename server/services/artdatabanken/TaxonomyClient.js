@@ -2,7 +2,7 @@
  * Class representing a client for the Taxonomy API.
  * Extends the base ApiClient class.
  */
-import ApiClient from "../../shared/ApiClient.js";
+import ApiClient from "../ApiClient.js";
 
 export default class TaxonomyClient extends ApiClient {
   /**
@@ -43,7 +43,7 @@ export default class TaxonomyClient extends ApiClient {
   async getChildIds(taxonId, useMainChildren = true) {
     // Construct the API endpoint URL for fetching child taxon IDs.
     let endpoint = new URL(
-      this.endpoints.childIds.replace(/{taxonId}/, taxonId),
+      this.endpoints.childIds.replace(/{taxonId}/, taxonId)
     );
     endpoint.searchParams.append("useMainChildren", useMainChildren);
 
@@ -66,11 +66,11 @@ export default class TaxonomyClient extends ApiClient {
   async getFilteredSelectedTaxa(
     taxonId,
     taxonCategories,
-    useMainChildren = true,
+    useMainChildren = true
   ) {
     // Construct the API endpoint URL for fetching child taxon IDs.
     let endpoint = new URL(
-      this.endpoints.filteredSelected.replace(/{taxonId}/, taxonId),
+      this.endpoints.filteredSelected.replace(/{taxonId}/, taxonId)
     );
     endpoint.searchParams.append("taxonCategories", taxonCategories);
     endpoint.searchParams.append("useMainChildren", useMainChildren);
@@ -92,7 +92,7 @@ export default class TaxonomyClient extends ApiClient {
    */
   async getTaxonList(
     conservationListId,
-    outputFields = ["id", "scientificname", "swedishname", "englishname"],
+    outputFields = ["id", "scientificname", "swedishname", "englishname"]
   ) {
     // Create a JSON body with the specified parameters for the request.
     let body = JSON.stringify({

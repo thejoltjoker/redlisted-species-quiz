@@ -2,7 +2,7 @@
  * Class representing a client for the Artfakta API.
  * Extends the base ApiClient class.
  */
-import ApiClient from "../../shared/ApiClient.js";
+import ApiClient from "../ApiClient.js";
 
 export default class ArtfaktaClient extends ApiClient {
   /**

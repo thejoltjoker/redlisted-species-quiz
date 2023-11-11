@@ -6,7 +6,7 @@
  * @class INaturalistClient
  * @extends {ApiClient}
  */
-import ApiClient from "../../shared/ApiClient.js";
+import ApiClient from "../ApiClient.js";
 
 export default class INaturalistClient extends ApiClient {
   /**

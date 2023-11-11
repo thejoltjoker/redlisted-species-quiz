@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-
+import helmet from "helmet";
 import cors from "cors";
+import RateLimit from "express-rate-limit";
 import INaturalistClient from "./services/iNaturalist/INaturalistClient.js";
 import TaxonomyClient from "./services/artdatabanken/TaxonomyClient.js";
 import ArtfaktaClient from "./services/artdatabanken/ArtfaktaClient.js";
@@ -11,7 +12,19 @@ dotenv.config();
 // Initialize the express app
 const app = express();
 const port = process.env.PORT;
+
+// Set up rate limiter: maximum of twenty requests per minute
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 100,
+});
+// Apply rate limiter to all requests
+app.use(limiter);
+// Setup cors and helmet
 app.use(cors());
+app.use(helmet());
+
+// Use JSON
 app.use(express.json());
 
 // Get iNaturalist ID
