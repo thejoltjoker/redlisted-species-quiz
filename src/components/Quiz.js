@@ -4,7 +4,6 @@ import QuizCard from "./QuizCard.js";
 import Species from "../shared/Species.js";
 import QuizRound from "./QuizRound.js";
 import QuizProgress from "./QuizProgress.js";
-import INaturalistClient from "../services/iNaturalist/INaturalistClient.js";
 import QuizInfoCard from "./QuizInfoCard.js";
 import QuizSummary from "./QuizSummary.js";
 import Endpoint from "../shared/Endpoint.js";

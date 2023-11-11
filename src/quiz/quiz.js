@@ -5,10 +5,11 @@ import {
   filterDataArray,
   filterSpeciesList,
   sha256sum,
-} from "./shared/utility.js";
-import Quiz from "./components/Quiz.js";
-import { speciesGroups } from "./shared/data.js";
-import QuizSelectionItem from "./components/QuizSelectionItem.js";
+} from "../src/shared/utility.js";
+import Quiz from "../src/components/Quiz.js";
+import { speciesGroups } from "../src/shared/data.js";
+import QuizSelectionItem from "../src/components/QuizSelectionItem.js";
+import Endpoint from "../src/shared/Endpoint.js";
 const header = document.querySelector("header");
 const quizContainer = document.querySelector("#quiz");
 const quizBoard = document.querySelector("#quiz-board");
@@ -113,7 +114,8 @@ const startQuiz = async (event) => {
   let notRedlisted;
   let redlisted;
   try {
-    const response = await fetch(`http://localhost:8080/species/${taxonId}`);
+    // const response = await fetch(`${process.env.APIURI}/species/${taxonId}`);
+    const response = await fetch(Endpoint.species(taxonId));
     if (!response.ok) {
       throw new Error("Network response was not OK");
     }
