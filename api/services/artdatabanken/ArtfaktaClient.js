@@ -1,11 +1,10 @@
+const axios = require("axios");
 class ArtfaktaClient {
   /**
    * Initializes a new ArtfaktaClient instance.
    * @param {string} subscriptionKey - The subscription key required for accessing the Artfakta API.
    */
   constructor(subscriptionKey) {
-    super();
-
     // Define the base URL and API endpoints for Artfakta.
     this.baseUrl =
       "https://api.artdatabanken.se/information/v1/speciesdataservice/v1";
@@ -34,7 +33,9 @@ class ArtfaktaClient {
     endpoint.searchParams.append("taxa", taxa);
 
     try {
-      const response = await axios.get(endpoint.href);
+      const response = await axios.get(endpoint.href, {
+        headers: this.headers,
+      });
       return await response.data;
     } catch (error) {
       console.error(error);

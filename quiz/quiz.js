@@ -74,6 +74,50 @@ pingServer();
 //   return button;
 // };
 
+const getSpecies = async (taxonId) => {
+  // Fetch all species based on the specified taxonId and taxonCategories
+  // const allSpecies = await client.getFilteredSelectedTaxa(taxonId, [17]); // 17 = Art
+  const url = new URL(`/api/species/${taxonId}`);
+
+  url.searchParams.append("taxonCategories", [17]); // 17 = Art
+  const allSpecies = await fetch(url.href);
+
+  // Filter out species without Swedish names
+  const allSpeciesSwedishNames = allSpecies.filter(
+    (species) => species.swedishName
+  );
+
+  // Extract all species IDs with Swedish names
+  const allIds = allSpeciesSwedishNames.map((i) => i.id);
+
+  // Fetch redlisted species based on the conservation list ID and output fields
+  const redlistedTaxonResponse = await client.getTaxonList(
+    227, // 227 = Rödlistade arter
+    ["id", "scientificname", "swedishname"]
+  );
+
+  // Extract taxon information for redlisted species
+  const redlistedSpecies =
+    redlistedTaxonResponse.natureConservationListTaxa[0].taxonInformation;
+
+  // Filter redlisted species based on the IDs of all species with Swedish names
+  const filteredRedlistSpecies = redlistedSpecies.filter((item) =>
+    allIds.includes(item.id)
+  );
+
+  // Extract IDs of redlisted species
+  const redlistedIds = redlistedSpecies.map((i) => i.id);
+
+  // Separate species into redlisted and not redlisted categories
+  const redlisted = filteredRedlistSpecies;
+  const notRedlisted = allSpeciesSwedishNames.filter(
+    (item) => !redlistedIds.includes(item.id)
+  );
+
+  // Return an array containing not redlisted and redlisted species
+  res.json({ redlisted: redlisted, notRedlisted: notRedlisted });
+};
+
 const quizSelection = () => {
   // Set header
   header.innerHTML = `<div class="p-2 text-center sm:p-3 md:p-5">

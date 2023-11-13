@@ -1,11 +1,11 @@
+const axios = require("axios");
+
 class TaxonomyClient {
   /**
    * Initializes a new TaxonomyClient instance.
    * @param {string} subscriptionKey - The subscription key required for accessing the Taxonomy API.
    */
   constructor(subscriptionKey) {
-    super();
-
     // Define the default endpoints for the Taxonomy API.
     this.endpoints = {
       definitions:
