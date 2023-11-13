@@ -1,5 +1,6 @@
 export default class Endpoint {
-  static baseUrl = `https://redlisted-species-quiz-server.onrender.com`;
+  static baseUrl = `/api`;
+  // static baseUrl = `https://redlisted-species-quiz-server.onrender.com`;
   // static baseUrl = `http://localhost.com:8080`;
   static ping = `${this.baseUrl}/ping`;
 
