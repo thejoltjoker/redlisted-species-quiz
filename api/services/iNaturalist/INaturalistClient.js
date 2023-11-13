@@ -1,20 +1,17 @@
+const axios = require("axios");
 /**
  * Class representing a client for the iNaturalist API.
  * Extends the base ApiClient class.
  *
  * @export
  * @class INaturalistClient
- * @extends {ApiClient}
  */
-import ApiClient from "../ApiClient.js";
 
-export default class INaturalistClient extends ApiClient {
+class INaturalistClient {
   /**
    * Initializes a new INaturalistClient instance.
    */
   constructor() {
-    super();
-
     // Define the default endpoint for the iNaturalist API.
     this.endpoints = {
       taxa: "https://api.inaturalist.org/v1/taxa",
@@ -33,12 +30,8 @@ export default class INaturalistClient extends ApiClient {
     url.search = searchParams;
 
     try {
-      const response = await this.request(
-        "GET",
-        // "https://corsproxy.io/?" +
-        url.href
-      );
-      return response;
+      const response = await axios.get(url.href);
+      return await response.data;
     } catch (error) {
       console.error(error);
     }
@@ -51,13 +44,12 @@ export default class INaturalistClient extends ApiClient {
    */
   async getTaxa(ids) {
     const url = new URL(
-      // "https://corsproxy.io/?" +
       `${this.endpoints.taxa}/${encodeURIComponent(ids.join(","))}`
     );
 
     try {
-      const response = await this.request("GET", url.href);
-      return response;
+      const response = await axios.get(url.href);
+      return await response.data;
     } catch (error) {
       console.error(error);
     }
@@ -81,6 +73,7 @@ export default class INaturalistClient extends ApiClient {
 
     try {
       const response = await this.searchTaxa(params);
+
       if (response.results.length > 0) {
         return response.results[0]["id"];
       }
@@ -90,3 +83,5 @@ export default class INaturalistClient extends ApiClient {
     }
   }
 }
+
+module.exports.INaturalistClient = INaturalistClient;

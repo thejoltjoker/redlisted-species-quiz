@@ -1,10 +1,4 @@
-/**
- * Class representing a client for the Artfakta API.
- * Extends the base ApiClient class.
- */
-import ApiClient from "../ApiClient.js";
-
-export default class ArtfaktaClient extends ApiClient {
+class ArtfaktaClient {
   /**
    * Initializes a new ArtfaktaClient instance.
    * @param {string} subscriptionKey - The subscription key required for accessing the Artfakta API.
@@ -40,11 +34,13 @@ export default class ArtfaktaClient extends ApiClient {
     endpoint.searchParams.append("taxa", taxa);
 
     try {
-      const response = await this.request("GET", endpoint.href);
-      return response;
+      const response = await axios.get(endpoint.href);
+      return await response.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);
     }
   }
 }
+
+module.exports.ArtfaktaClient = ArtfaktaClient;

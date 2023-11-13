@@ -1,10 +1,4 @@
-/**
- * Class representing a client for the Taxonomy API.
- * Extends the base ApiClient class.
- */
-import ApiClient from "../ApiClient.js";
-
-export default class TaxonomyClient extends ApiClient {
+class TaxonomyClient {
   /**
    * Initializes a new TaxonomyClient instance.
    * @param {string} subscriptionKey - The subscription key required for accessing the Taxonomy API.
@@ -48,7 +42,8 @@ export default class TaxonomyClient extends ApiClient {
     endpoint.searchParams.append("useMainChildren", useMainChildren);
 
     try {
-      return await this.request("GET", endpoint.href);
+      const response = await axios.get(endpoint.href);
+      return await response.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -76,7 +71,8 @@ export default class TaxonomyClient extends ApiClient {
     endpoint.searchParams.append("useMainChildren", useMainChildren);
 
     try {
-      return await this.request("GET", endpoint.href);
+      const response = await axios.get(endpoint.href);
+      return await response.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -95,19 +91,22 @@ export default class TaxonomyClient extends ApiClient {
     outputFields = ["id", "scientificname", "swedishname", "englishname"]
   ) {
     // Create a JSON body with the specified parameters for the request.
-    let body = JSON.stringify({
+    let body = {
       conservationListIds: [conservationListId],
       outputFields: outputFields,
-    });
+    };
 
     // Set the API endpoint URL for fetching taxa.
     let endpoint = this.endpoints.taxa;
 
     try {
-      return await this.request("POST", endpoint, body);
+      const response = await axios.post(endpoint, body);
+      return await response.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);
     }
   }
 }
+
+module.exports.TaxonomyClient = TaxonomyClient;
