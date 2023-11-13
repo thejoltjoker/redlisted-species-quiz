@@ -13,7 +13,7 @@ app.http("taxa", {
     context.log(`[/taxa] Getting taxa for ${ids}`);
     try {
       return {
-        jsonBody: { data: await client.getTaxa(ids.split(",")) },
+        jsonBody: await client.getTaxa(ids.split(",")),
       };
     } catch (error) {
       context.error(error);

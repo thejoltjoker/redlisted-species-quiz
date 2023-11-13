@@ -42,7 +42,9 @@ class TaxonomyClient {
     endpoint.searchParams.append("useMainChildren", useMainChildren);
 
     try {
-      const response = await axios.get(endpoint.href);
+      const response = await axios.get(endpoint.href, {
+        headers: this.headers,
+      });
       return await response.data;
     } catch (error) {
       console.error(error);
@@ -71,7 +73,9 @@ class TaxonomyClient {
     endpoint.searchParams.append("useMainChildren", useMainChildren);
 
     try {
-      const response = await axios.get(endpoint.href);
+      const response = await axios.get(endpoint.href, {
+        headers: this.headers,
+      });
       return await response.data;
     } catch (error) {
       console.error(error);
@@ -98,9 +102,10 @@ class TaxonomyClient {
 
     // Set the API endpoint URL for fetching taxa.
     let endpoint = this.endpoints.taxa;
-
     try {
-      const response = await axios.post(endpoint, body);
+      const response = await axios.post(endpoint, body, {
+        headers: this.headers,
+      });
       return await response.data;
     } catch (error) {
       console.error(error);

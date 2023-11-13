@@ -77,13 +77,15 @@ pingServer();
 const getSpecies = async (taxonId) => {
   // Fetch all species based on the specified taxonId and taxonCategories
   // const allSpecies = await client.getFilteredSelectedTaxa(taxonId, [17]); // 17 = Art
-  const url = new URL(`/api/species/${taxonId}`);
+  const url = `/api/species/${taxonId}?taxonCategories=${encodeURIComponent([
+    17,
+  ])}`;
 
-  url.searchParams.append("taxonCategories", [17]); // 17 = Art
-  const allSpecies = await fetch(url.href);
+  const allSpecies = await fetch(url);
+  const allSpeciesJson = await allSpecies.json();
 
   // Filter out species without Swedish names
-  const allSpeciesSwedishNames = allSpecies.filter(
+  const allSpeciesSwedishNames = allSpeciesJson.filter(
     (species) => species.swedishName
   );
 
@@ -91,14 +93,23 @@ const getSpecies = async (taxonId) => {
   const allIds = allSpeciesSwedishNames.map((i) => i.id);
 
   // Fetch redlisted species based on the conservation list ID and output fields
-  const redlistedTaxonResponse = await client.getTaxonList(
-    227, // 227 = Rödlistade arter
-    ["id", "scientificname", "swedishname"]
+  // const redlistedTaxonResponse = await client.getTaxonList(
+  //   227, // 227 = Rödlistade arter
+  //   ["id", "scientificname", "swedishname"]
+  // );
+  // 227 = Rödlistade arter
+  const redlistedTaxonResponse = await fetch(
+    `/api/list/${227}?outputFields=${encodeURIComponent([
+      "id",
+      "scientificname",
+      "swedishname",
+    ])}`
   );
+  const redlistedTaxonResponseJson = await redlistedTaxonResponse.json();
 
   // Extract taxon information for redlisted species
   const redlistedSpecies =
-    redlistedTaxonResponse.natureConservationListTaxa[0].taxonInformation;
+    redlistedTaxonResponseJson.natureConservationListTaxa[0].taxonInformation;
 
   // Filter redlisted species based on the IDs of all species with Swedish names
   const filteredRedlistSpecies = redlistedSpecies.filter((item) =>
@@ -115,7 +126,7 @@ const getSpecies = async (taxonId) => {
   );
 
   // Return an array containing not redlisted and redlisted species
-  res.json({ redlisted: redlisted, notRedlisted: notRedlisted });
+  return { redlisted: redlisted, notRedlisted: notRedlisted };
 };
 
 const quizSelection = () => {
@@ -157,12 +168,13 @@ const startQuiz = async (event) => {
   let redlisted;
   try {
     // const response = await fetch(`${process.env.APIURI}/species/${taxonId}`);
-    const url = Endpoint.species(taxonId);
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Network response was not OK");
-    }
-    ({ notRedlisted, redlisted } = await response.json());
+    // const url = Endpoint.species(taxonId);
+    // const response = await fetch(url);
+    // if (!response.ok) {
+    //   throw new Error("Network response was not OK");
+    // }
+    // ({ notRedlisted, redlisted } = await response.json());
+    ({ notRedlisted, redlisted } = await getSpecies(taxonId));
   } catch (error) {
     console.log("There has been a problem:", error);
   }

@@ -63,7 +63,9 @@ export default class Species {
       const url = Endpoint.speciesData(this.taxonId);
       const response = await fetch(url);
       const responseJson = await response.json();
-      const data = responseJson.data[0];
+      // console.log(responseJson);
+
+      const data = responseJson[0];
       if (populate) {
         this.assignAttributesFromObject(data);
         this.assignAttributesFromObject(data.speciesData);
@@ -130,8 +132,9 @@ export default class Species {
         : this.getInaturalistId();
 
       // const taxa = await inat.getTaxa([inatId]);
-      const response = await fetch(Endpoint.taxa([inatId]));
-      this.photos = response.data.results[0].taxon_photos.map(
+      const response = await fetch(Endpoint.taxa([inatId]), { method: "POST" });
+      const responseJson = response.json();
+      this.photos = responseJson.results[0].taxon_photos.map(
         (item) => item.photo
       );
       return this.photos;
